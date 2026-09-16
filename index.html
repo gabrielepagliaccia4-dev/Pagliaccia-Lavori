@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagliaccia Lavori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0e14;
+      --text: #f1efe5;
+      --muted: #c3c2b9;
+      --ivory: #deddd0;
+      --border: rgba(222, 221, 208, 0.23);
+      --panel: rgba(11, 14, 20, 0.88);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+    ::selection { background: var(--ivory); color: var(--bg); }
+    a { color: inherit; }
+    a:focus-visible { outline: 2px solid var(--ivory); outline-offset: 6px; }
+    .wrap { width: min(100% - 5rem, 1200px); margin-inline: auto; }
+    nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 10;
+      padding: 1.25rem 0;
+      background: rgba(11, 14, 20, 0.91);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
+    .logo { text-decoration: none; font-size: 1.05rem; font-weight: 600; letter-spacing: -0.04em; }
+    .logo span { font-weight: 300; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.78rem; color: var(--muted); text-decoration: none; }
+    .nav-links a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 6px; }
+    .intro { position: relative; display: grid; isolation: isolate; overflow: clip; }
+    .intro-content { grid-area: 1 / 1; min-width: 0; z-index: 0; }
+    .intro-art {
+      grid-area: 1 / 1;
+      align-self: start;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100svh;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 70% 85%, #deddd0 0%, #72746d 12%, transparent 36%),
+        radial-gradient(ellipse at 40% 23%, #b9b9ad 0%, #63665f 16%, transparent 40%),
+        #080c14;
+    }
+    #flow { display: block; width: 100%; height: 100%; opacity: 0; }
+    #flow.ready { opacity: 1; }
+    section { padding: 6rem 0; scroll-margin-top: 5rem; }
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      padding: 10rem 0 5rem;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, rgba(8, 12, 20, 0.83), rgba(8, 12, 20, 0.58) 42%, transparent 80%);
+    }
+    .home-card { max-width: 950px; }
+    .tagline, .section-label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .tagline { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .tagline::before { content: ''; width: 2rem; height: 1px; background: var(--ivory); }
+    h1 {
+      font-size: clamp(3rem, 6.6vw, 6rem);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.065em;
+      text-shadow: 0 2px 22px rgba(0, 0, 0, 0.7);
+    }
+    h1 em { font-style: normal; font-weight: 300; font-size: 0.88em; }
+    .hero-copy {
+      max-width: 580px;
+      margin-top: 2.75rem;
+      padding: 1.5rem 1.75rem;
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--ivory);
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .hero-copy p { font-size: 0.96rem; color: var(--muted); }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2.5rem;
+      margin-top: 1.5rem;
+      padding: 0.85rem 1.25rem;
+      background: var(--ivory);
+      color: #11141a;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--ivory);
+    }
+    .cta:hover { background: #f1efe5; }
+    .cta svg { width: 18px; height: 18px; }
+    h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; letter-spacing: -0.05em; line-height: 1.12; }
+    .sub { color: var(--muted); font-size: 0.95rem; margin-top: 1rem; }
+    .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; margin-bottom: 2.5rem; }
+    .section-label { color: var(--muted); white-space: nowrap; padding-top: 0.65rem; }
+    #opere { padding-top: 4rem; padding-bottom: 6rem; }
+    #opere .section-heading { padding: 2rem; background: var(--panel); border: 1px solid var(--border); }
+    .gallery { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.5rem; }
+    .work { grid-column: span 4; min-width: 0; background: #11151b; border: 1px solid var(--border); }
+    .work:nth-child(1), .work:nth-child(6) { grid-column: span 7; }
+    .work:nth-child(2), .work:nth-child(7) { grid-column: span 5; }
+    .work:nth-child(8), .work:nth-child(9) { grid-column: span 6; }
+    .work-image { overflow: hidden; }
+    .work img { display: block; width: 100%; height: 260px; object-fit: cover; }
+    .work:nth-child(1) img, .work:nth-child(2) img { height: 350px; }
+    .work figcaption {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .work-number { font-size: 0.65rem; letter-spacing: 0.12em; }
+    #attivita { position: relative; background: #0b0e14; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    .excavator-stage { display: flex; justify-content: center; padding: 1rem 0 2rem; }
+    .excavator-stage svg { display: block; width: min(300px, 100%); height: auto; overflow: visible; color: var(--ivory); }
+    .excavator-detail { fill: var(--bg); }
+    .excavator-metal { fill: #9c9e94; }
+    .excavator-joint { fill: var(--bg); stroke: currentColor; stroke-width: 2; }
+    .excavator-ground { stroke: #777b76; stroke-width: 1; }
+    .excavator-contact { opacity: 0; stroke: var(--ivory); fill: none; }
+    .activities-content { position: relative; }
+    .excavator-active .activities-content {
+      filter: blur(var(--activities-blur, 0px));
+      opacity: var(--activities-opacity, 1);
+    }
+    .excavator-active .activities-content:focus-within { filter: none; opacity: 1; }
+    .attivita-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--border); }
+    .attivita-card { display: flex; align-items: flex-start; gap: 1.4rem; padding: 2rem 1.5rem 2rem 0; border-bottom: 1px solid var(--border); }
+    .attivita-card:nth-child(even) { padding-left: 2rem; border-left: 1px solid var(--border); }
+    .attivita-card:last-child { grid-column: 1 / -1; }
+    .icon { flex: 0 0 2.5rem; color: #aaa99e; font-size: 0.72rem; letter-spacing: 0.08em; padding-top: 0.3rem; }
+    .attivita-card h3 { font-size: 1.07rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.5rem; }
+    .attivita-card p { font-size: 0.88rem; color: var(--muted); max-width: 440px; }
+    #perche {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: clip;
+      background: #15191e;
+      border-top: 1px solid var(--border);
+    }
+    .closing-drop-lane { position: absolute; inset: 0 auto 0 50%; width: 40px; margin-left: -20px; pointer-events: none; }
+    .closing-drop { display: block; position: absolute; top: 0; left: 4px; width: 32px; height: 44px; opacity: 0; transform-origin: 50% 0; }
+    .closing-drop-neck { position: absolute; top: 0; left: 19px; width: 2px; height: 0; opacity: 0; background: linear-gradient(#deddd0, rgba(222, 221, 208, 0.12)); }
+    .perche-card { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .perche-card .section-label { margin-bottom: 1.8rem; }
+    .perche-card p { align-self: center; font-size: 1rem; color: var(--muted); }
+    footer { padding: 2rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 2rem; }
+    footer a { text-decoration: none; }
+    @media (max-width: 860px) {
+      .wrap { width: calc(100% - 3rem); }
+      .hero { padding-top: 9rem; }
+      .hero::before { background: linear-gradient(90deg, rgba(8, 12, 20, 0.85), rgba(8, 12, 20, 0.35)); }
+      h1 { font-size: clamp(3rem, 7.5vw, 5rem); }
+      .gallery { gap: 1rem; }
+      .work, .work:nth-child(n) { grid-column: span 6; }
+      .work:last-child { grid-column: 1 / -1; }
+      .work img, .work:nth-child(n) img { height: 260px; }
+      .section-heading { flex-direction: column-reverse; gap: 1rem; }
+      .perche-card { gap: 2.5rem; }
+    }
+    @media (max-width: 540px) {
+      .wrap { width: calc(100% - 2.5rem); }
+      nav { padding: 0.9rem 0; }
+      nav .wrap { flex-wrap: wrap; justify-content: center; gap: 0.55rem; }
+      .nav-links { gap: 1.5rem; }
+      .nav-links a { font-size: 0.7rem; }
+      section { padding: 4rem 0; scroll-margin-top: 6.5rem; }
+      .hero { padding: 9rem 0 4rem; }
+      h1 { font-size: clamp(2.45rem, 10.6vw, 3.5rem); line-height: 1.07; }
+      .hero-copy { margin-top: 2rem; padding: 1.2rem; }
+      .hero-copy p { font-size: 0.88rem; }
+      .tagline { margin-bottom: 1.6rem; }
+      #opere { padding-top: 2rem; padding-bottom: 4rem; }
+      #opere .section-heading { padding: 1.4rem; }
+      .work, .work:nth-child(n) { grid-column: 1 / -1; }
+      .work img, .work:nth-child(n) img { height: auto; aspect-ratio: 4 / 3; }
+      .excavator-stage svg { width: min(240px, 100%); }
+      .attivita-grid, .perche-card { grid-template-columns: 1fr; }
+      .attivita-card, .attivita-card:nth-child(even) { padding: 1.5rem 0; border-left: 0; gap: 1rem; }
+      .perche-card { gap: 2rem; }
+      #perche > .wrap { width: calc(100% - 5rem); }
+      .closing-drop-lane { left: auto; right: 8px; width: 28px; margin-left: 0; }
+      .closing-drop { left: 2px; width: 24px; height: 33px; }
+      .closing-drop-neck { left: 13px; }
+      footer .wrap { flex-direction: column; gap: 0.75rem; }
+    }
+    @supports (animation-timeline: view()) {
+      @keyframes work-entry {
+        from { clip-path: inset(12% 0 0); transform: scale(1.035); }
+        to { clip-path: inset(0); transform: scale(1); }
+      }
+      .work img {
+        animation: work-entry linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .work img { animation: none; }
+      .excavator-active .activities-content { filter: none; opacity: 1; }
+      .excavator-contact, .closing-drop-lane { display: none; }
+    }
+    @media print {
+      .excavator-active .activities-content { filter: none; opacity: 1; }
+      .closing-drop-lane { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Navigazione principale">
+    <div class="wrap">
+      <a class="logo" href="#home">Pagliaccia <span>Lavori</span></a>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#opere">Opere</a>
+        <a href="#attivita">Attività</a>
+        <a href="#perche">Perché</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="intro" id="intro">
+      <div class="intro-art" aria-hidden="true"><canvas id="flow"></canvas></div>
+      <div class="intro-content">
+      <section class="hero" id="home">
+        <div class="wrap">
+          <div class="home-card">
+            <div class="tagline">Dal 1992</div>
+            <h1>Qualità e fiducia<br/><em>in ogni realizzazione</em></h1>
+            <div class="hero-copy">
+              <p>
+                Da oltre tre decenni la Ditta Pagliaccia Lavori persegue con impegno e dedizione
+                l’intento di fruire sempre un prodotto di qualità nell’esclusivo interesse della
+                propria clientela. La fiducia con partner, privati, enti e istituzioni civili e
+                militari è il valore assoluto del nostro lavoro, raggiungendo sempre gli obiettivi
+                prefissati sia in termini di realizzazioni che di relazioni.
+              </p>
+              <a class="cta" href="#opere">Scopri le opere<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6" /></svg></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="opere">
+        <div class="wrap">
+          <div class="section-heading">
+            <div>
+              <h2>Sinossi delle opere</h2>
+              <p class="sub">Uno sguardo alle realizzazioni attraverso i cantieri completati.</p>
+            </div>
+            <span class="section-label">01 / Le realizzazioni</span>
+          </div>
+          <div class="gallery" id="gallery">
+            <figure class="work"><div class="work-image"><img src="opera1.jpg" alt="Cantiere con escavatore, scavi e canalizzazioni" width="1024" height="768" loading="lazy" /></div><figcaption><span>Lavorazioni in cantiere</span><span class="work-number">01 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera2.jpg" alt="Posa di cordoli e preparazione di un percorso esterno" width="1024" height="768" loading="lazy" /></div><figcaption><span>Sistemazioni esterne</span><span class="work-number">02 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera3.jpg" alt="Serbatoi interrati durante l'installazione" width="1024" height="768" loading="lazy" /></div><figcaption><span>Impianti interrati</span><span class="work-number">03 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera4.jpg" alt="Camminamento in pietra in un giardino" width="1024" height="768" loading="lazy" /></div><figcaption><span>Percorsi in pietra</span><span class="work-number">04 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera5.jpg" alt="Area giochi con struttura in legno e pavimentazione" width="1024" height="576" loading="lazy" /></div><figcaption><span>Spazi all'aperto</span><span class="work-number">05 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera6.jpg" alt="Percorso in ghiaia affiancato da una palizzata in legno" width="1024" height="576" loading="lazy" /></div><figcaption><span>Percorsi e contenimenti</span><span class="work-number">06 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera7.jpg" alt="Dettaglio di una pavimentazione con pietre naturali" width="1024" height="460" loading="lazy" /></div><figcaption><span>Dettagli e finiture</span><span class="work-number">07 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera8.jpg" alt="Vista dall'alto di un giardino con gazebo e pavimentazione" width="1024" height="460" loading="lazy" /></div><figcaption><span>Riqualificazione degli esterni</span><span class="work-number">08 / 09</span></figcaption></figure>
+            <figure class="work"><div class="work-image"><img src="opera9.jpg" alt="Preparazione del terreno di un percorso con contenimenti laterali" width="1024" height="576" loading="lazy" /></div><figcaption><span>Preparazione del terreno</span><span class="work-number">09 / 09</span></figcaption></figure>
+          </div>
+        </div>
+      </section>
+      </div>
+    </div>
+
+    <section id="attivita">
+      <div class="wrap">
+        <div class="excavator-stage" aria-hidden="true">
+          <svg id="excavator" viewBox="0 0 400 236" fill="currentColor" focusable="false">
+            <path class="excavator-ground" d="M22 210H382M38 215l-5 5m22-5-5 5m22-5-5 5m262-5-5 5m22-5-5 5m22-5-5 5" fill="none" />
+            <ellipse id="excavator-contact" class="excavator-contact" cx="104" cy="210" rx="8" ry="2" />
+            <g id="excavator-body">
+              <rect x="246" y="184" width="119" height="25" rx="12.5" />
+              <rect class="excavator-detail" x="251" y="188" width="109" height="17" rx="8.5" />
+              <g class="excavator-metal">
+                <circle cx="263" cy="196.5" r="6" /><circle cx="284" cy="196.5" r="5" />
+                <circle cx="305" cy="196.5" r="5" /><circle cx="326" cy="196.5" r="5" /><circle cx="348" cy="196.5" r="6" />
+              </g>
+              <path d="M263 180v-13h82v13zm-19-15 5-12h95l14 9v17H244zm92-41h21l6 13v25h-27z" />
+              <path d="M264 151 273 77h62l8 74h-8l-7-66h-47l-9 66zM270 70h70v8h-70z" />
+              <rect x="325" y="61" width="5" height="9" rx="2" />
+              <path class="excavator-detail" d="M344 134h12v20h-12zM260 160h27v9h-27z" />
+              <path d="M300 146v-15l-10-13 7-5 14 15h15v20h-9v-12h-6v15z" />
+              <circle cx="309" cy="102" r="8" />
+              <path d="M302 112q8-5 14 3l4 17h-15l-7-9-11 3-3-5 15-5z" />
+              <path d="M290 126v20m-6-22h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+              <path d="m358 181 16 4 6 23h-6l-7-15-14-3z" />
+            </g>
+            <g id="excavator-boom" transform="translate(267 157) rotate(-110.991928)">
+              <path d="M-8-9Q-13 0-7 9L92 11 120 5 120-6 91-12Z" />
+              <path class="excavator-metal" d="M14-6H87L105 0H17Z" />
+              <path d="M12-15h70l26 10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+              <circle class="excavator-joint" r="5" />
+              <g id="excavator-stick" transform="translate(115 0) rotate(262.638282)">
+                <path d="M-8-8 20-10 86-5 91 1 84 8 17 8-8 5Z" />
+                <path class="excavator-metal" d="M17-4 72-1 74 3 17 3Z" />
+                <path d="M16-13 61-10 78-4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                <circle class="excavator-joint" r="5" />
+                <g id="excavator-bucket" transform="translate(85 0) rotate(-167.646353)">
+                  <path d="M-12-7 15-5 22 17 17 22 17 29 10 29 10 25 3 27 3 29-4 29Q-24 26-24 8L-22-1-16 13-8 15Z" />
+                  <path class="excavator-metal" d="m-17 12 7 7 19 1-3 4h-14q-9-4-9-12" />
+                  <circle class="excavator-joint" r="3.5" />
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="activities-content">
+        <div class="section-heading">
+          <div>
+            <h2>Indice delle attività svolte</h2>
+            <p class="sub">Competenze tecniche a 360 gradi per il territorio e l’edilizia.</p>
+          </div>
+          <span class="section-label">02 / Le competenze</span>
+        </div>
+        <div class="attivita-grid">
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">01</div>
+            <div>
+              <h3>Trattamento acque reflue</h3>
+              <p>Ideazione e progettazione di sistemi per il trattamento delle acque reflue.</p>
+            </div>
+          </article>
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">02</div>
+            <div>
+              <h3>Recupero e riutilizzo</h3>
+              <p>Realizzazione di sistemi per il recupero e riutilizzo delle acque reflue ad uso indiretto.</p>
+            </div>
+          </article>
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">03</div>
+            <div>
+              <h3>Stoccaggio acque piovane</h3>
+              <p>Realizzazione di sistemi di stoccaggio e riutilizzo delle acque piovane.</p>
+            </div>
+          </article>
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">04</div>
+            <div>
+              <h3>Reti idriche e fognarie</h3>
+              <p>Realizzazione di reti idriche e fognarie per ogni tipologia di intervento.</p>
+            </div>
+          </article>
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">05</div>
+            <div>
+              <h3>Impianti di sollevamento</h3>
+              <p>Impianti di sollevamento per acque reflue e piovane.</p>
+            </div>
+          </article>
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">06</div>
+            <div>
+              <h3>Lavori di edilizia in genere</h3>
+              <p>Edilizia civile e industriale con cura dei dettagli e delle finiture.</p>
+            </div>
+          </article>
+          <article class="attivita-card">
+            <div class="icon" aria-hidden="true">07</div>
+            <div>
+              <h3>Consulenze</h3>
+              <p>Consulenze specializzate di problem solving per ogni esigenza tecnica.</p>
+            </div>
+          </article>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="perche">
+      <div class="closing-drop-lane" aria-hidden="true">
+        <span id="closing-drop-neck" class="closing-drop-neck"></span>
+        <svg id="closing-drop" class="closing-drop" viewBox="0 0 48 66" fill="none" focusable="false">
+          <defs>
+            <linearGradient id="drop-glass" x1="10" y1="20" x2="40" y2="59" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#f0eee0" stop-opacity="0.9" />
+              <stop offset="0.28" stop-color="#aebbb9" stop-opacity="0.24" />
+              <stop offset="0.65" stop-color="#34454d" stop-opacity="0.5" />
+              <stop offset="1" stop-color="#deddd0" stop-opacity="0.85" />
+            </linearGradient>
+            <linearGradient id="drop-edge" x1="12" y1="5" x2="37" y2="58" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#f5f2e4" stop-opacity="0.95" />
+              <stop offset="0.55" stop-color="#c0ceca" stop-opacity="0.2" />
+              <stop offset="1" stop-color="#eef2e7" stop-opacity="0.85" />
+            </linearGradient>
+          </defs>
+          <path d="M24 2C23 15 7 29 7 42a17 17 0 0 0 34 0C41 29 25 15 24 2Z" fill="url(#drop-glass)" stroke="url(#drop-edge)" stroke-width="1.2" />
+          <path d="M19 28c-5 7-8 13-5 20" stroke="#f6f4e9" stroke-opacity="0.85" stroke-width="2.3" stroke-linecap="round" />
+          <path d="M21 54c6 2 12-2 14-7" stroke="#e1eae2" stroke-opacity="0.55" stroke-width="1.1" stroke-linecap="round" />
+        </svg>
+      </div>
+      <div class="wrap">
+        <div class="perche-card">
+          <div>
+            <span class="section-label">03 / Il nostro approccio</span>
+            <h2>Perché scegliere Pagliaccia Lavori</h2>
+          </div>
+          <p>
+            La Ditta Pagliaccia Lavori si distingue per l’esperienza tecnica, la capacità
+            organizzativa, l’affidabilità e la serietà, qualità che promettono un prodotto di
+            qualità e durata sia in termini realizzativi che relazionali. L’attenzione è sempre
+            volta allo studio di soluzioni che tengano conto dell’aspetto economico nella giusta
+            misura adeguata alle necessità, in considerazione dell’equo scambio di valori, fattore
+            intrinseco in ogni rapporto commerciale.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Pagliaccia Lavori &mdash; Dal 1992</span>
+      <a href="#home">Torna all'inizio</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const section = document.getElementById('attivita');
+      const boom = document.getElementById('excavator-boom');
+      const stick = document.getElementById('excavator-stick');
+      const bucket = document.getElementById('excavator-bucket');
+      const contact = document.getElementById('excavator-contact');
+      const closing = document.getElementById('perche');
+      const drop = document.getElementById('closing-drop');
+      const neck = document.getElementById('closing-drop-neck');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const clamp = value => Math.max(0, Math.min(1, value));
+      const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
+      const degrees = radians => radians * 180 / Math.PI;
+      let frame = 0;
+      let lastProgress = -1;
+
+      function renderClosing(height, exit) {
+        const bounds = closing.getBoundingClientRect();
+        const start = window.scrollY + bounds.top - height * 0.52;
+        const maximumScroll = document.documentElement.scrollHeight - height;
+        const end = Math.min(start + bounds.height * 0.85, maximumScroll - 1);
+        const range = Math.max(1, end - start);
+        const fall = reducedMotion.matches ? 0 : clamp((window.scrollY - start) / range);
+        const target = Math.max(0, bounds.height - Math.min(80, height * 0.1));
+        const distance = fall * range + fall * fall * (target - range);
+        const opacity = exit >= 1 ? smooth(fall / 0.055) * (1 - smooth((fall - 0.76) / 0.24)) : 0;
+        drop.style.transform = `translateY(${distance.toFixed(3)}px) scale(${(0.8 + smooth(fall / 0.14) * 0.2).toFixed(3)}, ${(1.35 - smooth(fall / 0.18) * 0.35).toFixed(3)})`;
+        drop.style.opacity = opacity.toFixed(3);
+        neck.style.height = `${Math.min(26, distance + 4).toFixed(3)}px`;
+        neck.style.opacity = (exit >= 1 ? smooth(fall / 0.02) * (1 - smooth(fall / 0.1)) * 0.7 : 0).toFixed(3);
+      }
+
+      function renderExcavator() {
+        frame = 0;
+        if (document.hidden) return;
+        const height = window.innerHeight;
+        const bounds = section.getBoundingClientRect();
+        const progress = reducedMotion.matches ? 1 : clamp((height * 0.86 - bounds.top) / (height * 0.62));
+        const reveal = smooth((progress - 0.66) / 0.34);
+        const exit = reducedMotion.matches ? 0 : smooth((height * 0.8 - bounds.bottom) / (height * 0.28));
+        const visibility = reveal * (1 - exit);
+        section.style.setProperty('--activities-blur', `${(8 * (1 - visibility)).toFixed(3)}px`);
+        section.style.setProperty('--activities-opacity', (0.52 + visibility * 0.48).toFixed(3));
+        section.classList.add('excavator-active');
+        renderClosing(height, exit);
+        if (progress === lastProgress) return;
+        lastProgress = progress;
+        const movement = smooth(progress / 0.66);
+        const x = 151 - movement * 47;
+        const y = 90 + movement * 91;
+        const dx = x - 267;
+        const dy = y - 157;
+        const distance = Math.hypot(dx, dy);
+        const shoulder = Math.atan2(dy, dx) + Math.acos(Math.max(-1, Math.min(1, (distance * distance + 115 * 115 - 85 * 85) / (2 * distance * 115))));
+        const forearm = Math.atan2(dy - 115 * Math.sin(shoulder), dx - 115 * Math.cos(shoulder));
+        const bucketTilt = -16 * (1 - movement);
+        boom.setAttribute('transform', `translate(267 157) rotate(${degrees(shoulder)})`);
+        stick.setAttribute('transform', `translate(115 0) rotate(${degrees(forearm - shoulder)})`);
+        bucket.setAttribute('transform', `translate(85 0) rotate(${bucketTilt - degrees(forearm)})`);
+        contact.setAttribute('cx', '121');
+        contact.setAttribute('rx', (8 + reveal * 36).toFixed(3));
+        contact.setAttribute('ry', (2 + reveal * 3).toFixed(3));
+        contact.style.opacity = (Math.sin(reveal * Math.PI) * 0.65).toFixed(3);
+      }
+
+      function scheduleExcavator() {
+        if (!frame && !document.hidden) frame = requestAnimationFrame(renderExcavator);
+      }
+
+      window.addEventListener('scroll', scheduleExcavator, { passive: true });
+      window.addEventListener('resize', scheduleExcavator, { passive: true });
+      window.addEventListener('pageshow', scheduleExcavator);
+      reducedMotion.addEventListener('change', scheduleExcavator);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else scheduleExcavator();
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(scheduleExcavator).observe(document.querySelector('main'));
+      renderExcavator();
+    })();
+
+    (() => {
+      const canvas = document.getElementById('flow');
+      const intro = document.getElementById('intro');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let gl;
+      let program;
+      let resolution;
+      let scrollPosition;
+      let frame = 0;
+      let lost = false;
+
+      function fallback() {
+        canvas.classList.remove('ready');
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+
+      function compile(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          gl.deleteShader(shader);
+          throw new Error('Shader non disponibile');
+        }
+        return shader;
+      }
+
+      function initialize() {
+        try {
+          gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
+          if (!gl) return;
+          const vertex = compile(gl.VERTEX_SHADER, `
+            attribute vec2 aPosition;
+            varying vec2 vUv;
+            void main() {
+              vUv = aPosition * 0.5 + 0.5;
+              gl_Position = vec4(aPosition, 0.0, 1.0);
+            }
+          `);
+          const fragment = compile(gl.FRAGMENT_SHADER, `
+            precision highp float;
+            varying vec2 vUv;
+            uniform vec2 uResolution;
+            uniform float uScroll;
+
+            float hash(vec2 p) {
+              vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+              p3 += dot(p3, p3.yzx + 33.33);
+              return fract((p3.x + p3.y) * p3.z);
+            }
+
+            float noise(vec2 p) {
+              vec2 cell = floor(p);
+              vec2 f = fract(p);
+              f = f * f * (3.0 - 2.0 * f);
+              return mix(mix(hash(cell), hash(cell + vec2(1.0, 0.0)), f.x),
+                mix(hash(cell + vec2(0.0, 1.0)), hash(cell + vec2(1.0)), f.x), f.y);
+            }
+
+            void main() {
+              vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
+              float travel = uScroll * 0.32;
+              float y = uv.y + travel;
+              float curve = 0.48 + 0.29 * sin(y * 8.5 + 1.0);
+              curve += 0.035 * sin(y * 16.0 - travel * 0.7);
+              float clouds = noise(vec2(uv.x * 5.0, y * 5.0));
+              float width = 0.115 + 0.035 * sin(y * 5.5 + 0.6);
+              float distanceToFlow = abs(uv.x - curve + (clouds - 0.5) * 0.075);
+              float core = exp(-pow(distanceToFlow / width, 2.0) * 1.4);
+              float haze = exp(-pow(distanceToFlow / (width * 2.0), 2.0));
+              float side = exp(-pow((uv.x + 0.18 * sin(y * 5.0) - 0.04) / 0.17, 2.0));
+              side *= 0.25 + 0.3 * noise(vec2(uv.x * 3.0, y * 3.0));
+              float light = clamp(core * 0.8 + haze * 0.24 + side * 0.5, 0.0, 1.0);
+              vec3 color = mix(vec3(0.025, 0.035, 0.055), vec3(0.45, 0.46, 0.43), smoothstep(0.02, 0.6, light));
+              color = mix(color, vec3(0.88, 0.875, 0.815), smoothstep(0.38, 1.0, light));
+              vec2 pixel = uv * uResolution;
+              float grain = hash(floor(pixel)) - 0.5;
+              float weave = sin(pixel.x * 2.3 + pixel.y * 0.85) * sin(pixel.y * 2.15);
+              color += grain * (0.055 + light * 0.09) + weave * 0.018;
+              color *= 0.94 + noise(vec2(uv.x * 17.0, y * 17.0)) * 0.06;
+              gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
+            }
+          `);
+          program = gl.createProgram();
+          gl.attachShader(program, vertex);
+          gl.attachShader(program, fragment);
+          gl.linkProgram(program);
+          gl.deleteShader(vertex);
+          gl.deleteShader(fragment);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error('Programma grafico non disponibile');
+          gl.useProgram(program);
+          const buffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+          const position = gl.getAttribLocation(program, 'aPosition');
+          gl.enableVertexAttribArray(position);
+          gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+          resolution = gl.getUniformLocation(program, 'uResolution');
+          scrollPosition = gl.getUniformLocation(program, 'uScroll');
+          schedule();
+        } catch {
+          program = null;
+          fallback();
+        }
+      }
+
+      function render() {
+        frame = 0;
+        if (!program || lost || document.hidden) return;
+        const bounds = intro.getBoundingClientRect();
+        if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        if (!width || !height) return;
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        const pixelWidth = Math.round(width * ratio);
+        const pixelHeight = Math.round(height * ratio);
+        if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+          canvas.width = pixelWidth;
+          canvas.height = pixelHeight;
+          gl.viewport(0, 0, pixelWidth, pixelHeight);
+        }
+        const scroll = reducedMotion.matches ? 0 : Math.max(0, Math.min(-bounds.top, bounds.height - height)) / height;
+        gl.uniform2f(resolution, pixelWidth, pixelHeight);
+        gl.uniform1f(scrollPosition, scroll);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        canvas.classList.add('ready');
+      }
+
+      function schedule() {
+        if (!frame && !lost && !document.hidden) frame = requestAnimationFrame(render);
+      }
+
+      window.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('resize', schedule, { passive: true });
+      reducedMotion.addEventListener('change', schedule);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else schedule();
+      });
+      canvas.addEventListener('webglcontextlost', event => {
+        event.preventDefault();
+        lost = true;
+        fallback();
+      });
+      canvas.addEventListener('webglcontextrestored', () => {
+        lost = false;
+        initialize();
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(intro);
+      initialize();
+    })();
+  </script>
+</body>
+</html>
