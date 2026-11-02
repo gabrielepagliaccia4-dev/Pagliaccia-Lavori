@@ -48,7 +48,9 @@
     .banner { position: relative; padding-top: 4.4rem; overflow: hidden; background: var(--bg); }
     .banner-inner { position: relative; width: max(100%, 640px); line-height: 0; }
     .banner-inner img, .banner-inner svg { display: block; width: 100%; height: auto; }
-    .banner-inner svg { position: absolute; inset: 0; height: 100%; overflow: visible; pointer-events: none; }
+    .heron-layer { position: absolute; inset: 0; visibility: hidden; pointer-events: none; }
+    .heron-layer img, .heron-layer svg { position: absolute; inset: 0; height: 100%; overflow: visible; }
+    .heron-moving .heron-layer { visibility: visible; }
     .intro { position: relative; display: grid; isolation: isolate; overflow: clip; }
     .intro-content { grid-area: 1 / 1; min-width: 0; z-index: 0; }
     .intro-art {
@@ -271,6 +273,14 @@
     <header class="banner" id="banner">
       <div class="banner-inner">
         <img src="banner.jpg" width="1024" height="160" alt="Pagliaccia Lavori - Scientia et actio" />
+        <div class="heron-layer" aria-hidden="true">
+          <img src="banner-base.jpg" width="1024" height="160" alt="" />
+          <svg viewBox="0 0 1024 160" focusable="false">
+            <g id="heron-wing-far"><image href="heron-wing-far.png" x="76" y="72" width="29" height="17" /></g>
+            <image href="heron-body.png" x="40" y="58" width="58" height="52" />
+            <g id="heron-wing-near"><image href="heron-wing-near.png" x="43" y="61" width="26" height="32" /></g>
+          </svg>
+        </div>
       </div>
     </header>
 
@@ -499,6 +509,41 @@
     </div>
   </footer>
 
+  <script>
+    (() => {
+      const banner = document.getElementById('banner');
+      const near = document.getElementById('heron-wing-near');
+      const far = document.getElementById('heron-wing-far');
+      const nav = document.querySelector('nav');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const clamp = value => Math.max(0, Math.min(1, value));
+      let frame = 0;
+      let last = -1;
+
+      function render() {
+        frame = 0;
+        banner.style.paddingTop = `${nav.offsetHeight}px`;
+        const bounds = banner.getBoundingClientRect();
+        const range = Math.max(1, bounds.bottom - banner.querySelector('img').offsetHeight * 0.48 + window.scrollY - nav.offsetHeight);
+        const progress = reducedMotion.matches ? 0 : clamp(window.scrollY / range);
+        if (progress === last) return;
+        last = progress;
+        banner.classList.toggle('heron-moving', progress > 0);
+        near.setAttribute('transform', `rotate(${(-95 * progress).toFixed(3)} 62 78) translate(62 78) scale(${(1 - 0.15 * progress).toFixed(4)}) translate(-62 -78)`);
+        far.setAttribute('transform', `rotate(${(40 * progress).toFixed(3)} 78 77) translate(78 77) scale(${(1 - 0.7 * progress).toFixed(4)}) translate(-78 -77)`);
+        far.setAttribute('opacity', (1 - clamp((progress - 0.55) / 0.45)).toFixed(3));
+      }
+
+      function schedule() {
+        if (!frame) frame = requestAnimationFrame(render);
+      }
+
+      window.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('resize', schedule, { passive: true });
+      reducedMotion.addEventListener('change', schedule);
+      render();
+    })();
+  </script>
   <script>
     (() => {
       const section = document.getElementById('attivita');
