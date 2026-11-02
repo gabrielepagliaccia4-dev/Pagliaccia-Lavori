@@ -271,27 +271,6 @@
     <header class="banner" id="banner">
       <div class="banner-inner">
         <img src="banner.jpg" width="1024" height="160" alt="Pagliaccia Lavori - Scientia et actio" />
-        <svg viewBox="0 0 1024 160" aria-hidden="true" focusable="false">
-          <g id="heron" transform="translate(69 78) rotate(-37)">
-            <g id="heron-wing-far" transform="rotate(50)"><g transform="scale(1 -1.25)">
-              <path d="M0,3 C8,5.5 20,5 31,1.5 L28.5,-1.8 L26.5,0.6 L24,-3.6 L21.5,-1.2 L18.5,-5.8 L15.5,-2.8 L12,-7.2 L8.5,-4 L4.5,-8 L0,-5 Z" fill="#fff" stroke="#111" stroke-width="0.6" stroke-linejoin="round" />
-              <path d="M5,2 L7,-6 M10,3 L13,-5 M15.5,3.4 L18.6,-4 M21,2.8 L24.2,-2.4" stroke="#111" stroke-width="1.2" fill="none" />
-              <path d="M24,3.4 C27,3 29.5,2.3 31,1.5 L28.5,-1.8 L26.5,0.6 L24.6,-2.8 Z" fill="#111" />
-            </g></g>
-            <path d="M-20,1 L-41,4 M-20,0 L-40,2" stroke="#111" stroke-width="0.7" fill="none" />
-            <path d="M-19,-1.6 L-27,0 L-19,1.6 Z" fill="#111" />
-            <ellipse cx="-4" cy="0" rx="17" ry="4.2" fill="#fff" stroke="#111" stroke-width="0.6" />
-            <path d="M9,0 C16,-3 22,3 29,3" stroke="#111" stroke-width="4.4" fill="none" stroke-linecap="round" />
-            <path d="M9,0 C16,-3 22,3 29,3" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" />
-            <ellipse cx="29.5" cy="3.4" rx="3" ry="2.2" fill="#fff" stroke="#111" stroke-width="0.6" />
-            <path d="M31.5,2.4 L38,4.6 L31.5,4.8 Z" fill="#111" />
-            <g id="heron-wing-near" transform="rotate(-100)"><g transform="scale(1 1.25)">
-              <path d="M0,3 C8,5.5 20,5 31,1.5 L28.5,-1.8 L26.5,0.6 L24,-3.6 L21.5,-1.2 L18.5,-5.8 L15.5,-2.8 L12,-7.2 L8.5,-4 L4.5,-8 L0,-5 Z" fill="#fff" stroke="#111" stroke-width="0.6" stroke-linejoin="round" />
-              <path d="M5,2 L7,-6 M10,3 L13,-5 M15.5,3.4 L18.6,-4 M21,2.8 L24.2,-2.4" stroke="#111" stroke-width="1.2" fill="none" />
-              <path d="M24,3.4 C27,3 29.5,2.3 31,1.5 L28.5,-1.8 L26.5,0.6 L24.6,-2.8 Z" fill="#111" />
-            </g></g>
-          </g>
-        </svg>
       </div>
     </header>
 
@@ -520,39 +499,6 @@
     </div>
   </footer>
 
-  <script>
-    (() => {
-      const banner = document.getElementById('banner');
-      const near = document.getElementById('heron-wing-near');
-      const far = document.getElementById('heron-wing-far');
-      const nav = document.querySelector('nav');
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const clamp = value => Math.max(0, Math.min(1, value));
-      let frame = 0;
-      let last = -1;
-
-      function render() {
-        frame = 0;
-        banner.style.paddingTop = `${nav.offsetHeight}px`;
-        const bounds = banner.getBoundingClientRect();
-        const range = Math.max(1, bounds.bottom - banner.querySelector('img').offsetHeight * 0.48 + window.scrollY - nav.offsetHeight);
-        const progress = reducedMotion.matches ? 0 : clamp(window.scrollY / range);
-        if (progress === last) return;
-        last = progress;
-        near.setAttribute('transform', `rotate(${(-100 - 72 * progress).toFixed(3)})`);
-        far.setAttribute('transform', `rotate(${(50 + 122 * progress).toFixed(3)})`);
-      }
-
-      function schedule() {
-        if (!frame) frame = requestAnimationFrame(render);
-      }
-
-      window.addEventListener('scroll', schedule, { passive: true });
-      window.addEventListener('resize', schedule, { passive: true });
-      reducedMotion.addEventListener('change', schedule);
-      render();
-    })();
-  </script>
   <script>
     (() => {
       const section = document.getElementById('attivita');
