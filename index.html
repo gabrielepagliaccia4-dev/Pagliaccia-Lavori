@@ -47,10 +47,7 @@
     .nav-links a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 6px; }
     .banner { position: relative; padding-top: 4.4rem; overflow: hidden; background: var(--bg); }
     .banner-inner { position: relative; width: max(100%, 640px); line-height: 0; }
-    .banner-inner img, .banner-inner svg { display: block; width: 100%; height: auto; }
-    .heron-layer { position: absolute; inset: 0; visibility: hidden; pointer-events: none; }
-    .heron-layer img, .heron-layer svg { position: absolute; inset: 0; height: 100%; overflow: visible; }
-    .heron-moving .heron-layer { visibility: visible; }
+    .banner-inner img { display: block; width: 100%; height: auto; }
     .intro { position: relative; display: grid; isolation: isolate; overflow: clip; }
     .intro-content { grid-area: 1 / 1; min-width: 0; z-index: 0; }
     .intro-art {
@@ -63,13 +60,16 @@
       z-index: -1;
       pointer-events: none;
       overflow: hidden;
-      background:
-        radial-gradient(ellipse at 70% 85%, #deddd0 0%, #72746d 12%, transparent 36%),
-        radial-gradient(ellipse at 40% 23%, #b9b9ad 0%, #63665f 16%, transparent 40%),
-        #080c14;
+      background: #d8dccb;
     }
-    #flow { display: block; width: 100%; height: 100%; opacity: 0; }
-    #flow.ready { opacity: 1; }
+    .scene-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .scene-layer, .scene-fog, .scene-river { visibility: hidden; }
+    .scene-river { will-change: transform; }
+    .river-sharp { -webkit-mask-image: linear-gradient(180deg, #000 var(--reveal, 0%), transparent calc(var(--reveal, 0%) + 14%)); mask-image: linear-gradient(180deg, #000 var(--reveal, 0%), transparent calc(var(--reveal, 0%) + 14%)); }
+    .river-on .scene-river { visibility: visible; }
+    .scene-layer { will-change: transform; object-fit: fill; }
+    .scene-moving .scene-layer, .scene-moving .scene-fog { visibility: visible; }
+    .scene-moving .scene-photo { visibility: hidden; }
     section { padding: 6rem 0; scroll-margin-top: 5rem; }
     .hero {
       position: relative;
@@ -84,9 +84,22 @@
       position: absolute;
       inset: 0;
       z-index: -1;
-      background: linear-gradient(90deg, rgba(8, 12, 20, 0.83), rgba(8, 12, 20, 0.58) 42%, transparent 80%);
+      background: radial-gradient(ellipse 70% 80% at 30% 50%, rgba(6, 9, 15, 0.5), transparent 75%);
     }
-    .home-card { max-width: 950px; }
+    .home-card {
+      max-width: 950px;
+      width: fit-content;
+      padding: 3rem 3.25rem;
+      background: rgba(8, 12, 20, 0.5);
+      border: 1px solid rgba(241, 239, 229, 0.16);
+      backdrop-filter: blur(18px) saturate(1.15);
+      -webkit-backdrop-filter: blur(18px) saturate(1.15);
+      box-shadow: 0 60px 120px -30px rgba(0, 0, 0, 0.75), 0 28px 50px -18px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transform: translate3d(0, var(--lift, 0px), 0) scale(var(--lift-scale, 1));
+      transform-origin: 50% 0;
+      will-change: transform;
+    }
+    .tagline { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); }
     .tagline, .section-label {
       display: block;
       font-size: 0.68rem;
@@ -101,7 +114,7 @@
       font-weight: 400;
       line-height: 1.02;
       letter-spacing: -0.065em;
-      text-shadow: 0 2px 22px rgba(0, 0, 0, 0.7);
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45), 0 10px 26px rgba(0, 0, 0, 0.6), 0 26px 70px rgba(0, 0, 0, 0.5);
     }
     h1 em { font-style: normal; font-weight: 300; font-size: 0.88em; }
     .hero-copy {
@@ -110,7 +123,8 @@
       padding: 1.5rem 1.75rem;
       border: 1px solid var(--border);
       border-left: 2px solid var(--ivory);
-      background: var(--panel);
+      background: rgba(8, 12, 20, 0.6);
+      box-shadow: 0 22px 45px -20px rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
     }
@@ -129,6 +143,7 @@
       text-decoration: none;
       border: 1px solid var(--ivory);
     }
+    .cta { box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.7); }
     .cta:hover { background: #f1efe5; }
     .cta svg { width: 18px; height: 18px; }
     h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; letter-spacing: -0.05em; line-height: 1.12; }
@@ -136,15 +151,93 @@
     .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; margin-bottom: 2.5rem; }
     .section-label { color: var(--muted); white-space: nowrap; padding-top: 0.65rem; }
     #opere { padding-top: 4rem; padding-bottom: 6rem; }
-    #opere .section-heading { padding: 2rem; background: var(--panel); border: 1px solid var(--border); }
-    .gallery { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.5rem; }
-    .work { grid-column: span 4; min-width: 0; background: #11151b; border: 1px solid var(--border); }
-    .work:nth-child(1), .work:nth-child(6) { grid-column: span 7; }
-    .work:nth-child(2), .work:nth-child(7) { grid-column: span 5; }
-    .work:nth-child(8), .work:nth-child(9) { grid-column: span 6; }
-    .work-image { overflow: hidden; }
-    .work img { display: block; width: 100%; height: 260px; object-fit: cover; }
-    .work:nth-child(1) img, .work:nth-child(2) img { height: 350px; }
+    #opere .section-heading { padding: 2rem; background: var(--panel); border: 1px solid var(--border); box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.7), 0 20px 40px -20px rgba(0, 0, 0, 0.5); }
+    .gallery { display: flex; flex-direction: column; gap: 7rem; padding: 3rem 0 4rem; }
+    .work {
+      width: min(40%, 520px);
+      margin-left: auto;
+      background: #11151b;
+      border: 1px solid var(--border);
+      box-shadow: 0 60px 110px -35px rgba(0, 0, 0, 0.8), 0 26px 46px -22px rgba(0, 0, 0, 0.6);
+      transform: translate3d(0, var(--float, 0px), 0);
+      will-change: transform;
+    }
+    .work:nth-child(even) { margin-left: 0; margin-right: auto; }
+    .work-image { display: block; width: 100%; padding: 0; border: 0; background: none; overflow: hidden; cursor: zoom-in; }
+    .work-image:focus-visible { outline: 2px solid var(--ivory); outline-offset: 4px; }
+    .work img { display: block; width: 100%; height: auto; transition: transform 0.5s ease; }
+    .work-image:hover img { transform: scale(1.03); }
+    .viewer {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: var(--text);
+      background: transparent;
+      overflow: hidden;
+    }
+    .viewer::backdrop { background: rgba(4, 6, 10, 0.97); }
+    .viewer-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+    }
+    .viewer-track::-webkit-scrollbar { display: none; }
+    .viewer-slide {
+      flex: 0 0 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      min-width: 0;
+      padding: 4.5rem 1rem 3rem;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+    }
+    .viewer-slide img { display: block; max-width: min(100%, 1100px); max-height: calc(100% - 3rem); width: auto; height: auto; object-fit: contain; box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.9); }
+    .viewer-slide p { font-size: 0.8rem; color: var(--muted); text-align: center; }
+    .viewer-button {
+      position: absolute;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 2.9rem;
+      height: 2.9rem;
+      border: 1px solid rgba(241, 239, 229, 0.25);
+      background: rgba(11, 14, 20, 0.6);
+      color: var(--text);
+      font: inherit;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .viewer-button:hover { background: rgba(241, 239, 229, 0.15); }
+    .viewer-button:focus-visible { outline: 2px solid var(--ivory); outline-offset: 3px; }
+    .viewer-close { top: 1rem; right: 1rem; }
+    .viewer-prev, .viewer-next { top: 50%; margin-top: -1.45rem; }
+    .viewer-prev { left: 1rem; }
+    .viewer-next { right: 1rem; }
+    .viewer-count { position: absolute; top: 1.75rem; left: 1.25rem; font-size: 0.72rem; letter-spacing: 0.14em; color: var(--muted); }
+    .viewer-flight { position: fixed; z-index: 3; top: 0; left: 0; margin: 0; object-fit: cover; pointer-events: none; transform-origin: 0 0; }
+    html.viewer-open { overflow: hidden; }
+    @keyframes viewer-fade { from { opacity: 0; } }
+    .viewer[open]::backdrop { animation: viewer-fade 0.3s ease; }
+    .viewer[open] .viewer-button, .viewer[open] .viewer-count, .viewer[open] .viewer-slide p { animation: viewer-fade 0.4s ease; }
+    .viewer-closing::backdrop { opacity: 0; transition: opacity 0.3s ease; }
+    .viewer-closing .viewer-button, .viewer-closing .viewer-count { opacity: 0; }
     .work figcaption {
       display: flex;
       justify-content: space-between;
@@ -156,6 +249,36 @@
     }
     .work-number { font-size: 0.65rem; letter-spacing: 0.12em; }
     #attivita { position: relative; background: #0b0e14; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    .glass-line {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      z-index: 2;
+      width: var(--line-width, 100%);
+      height: var(--line-height, 8px);
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(190, 215, 255, 0.95) 0%, rgba(90, 140, 255, 0.85) 22%, rgba(16, 58, 235, 0.92) 48%, rgba(5, 30, 170, 0.96) 78%, rgba(40, 90, 255, 0.9) 100%);
+      box-shadow:
+        0 0 0 1px rgba(150, 185, 255, 0.35),
+        0 0 14px rgba(20, 70, 255, 0.75),
+        0 0 42px rgba(10, 50, 230, 0.45),
+        inset 0 1px 1px rgba(255, 255, 255, 0.7),
+        inset 0 -1px 2px rgba(0, 10, 80, 0.6);
+      backdrop-filter: blur(6px) saturate(1.6);
+      -webkit-backdrop-filter: blur(6px) saturate(1.6);
+      opacity: var(--line-opacity, 1);
+    }
+    .glass-line::after {
+      content: '';
+      position: absolute;
+      inset: 12% 3% auto;
+      height: 30%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85) 20%, rgba(255, 255, 255, 0.35) 55%, rgba(255, 255, 255, 0.8) 80%, transparent);
+    }
     .excavator-stage { display: flex; justify-content: center; padding: 1rem 0 2rem; }
     .excavator-stage svg { display: block; width: min(300px, 100%); height: auto; overflow: visible; color: var(--ivory); }
     .excavator-detail { fill: var(--bg); }
@@ -198,12 +321,9 @@
     @media (max-width: 860px) {
       .wrap { width: calc(100% - 3rem); }
       .hero { padding-top: 4rem; }
-      .hero::before { background: linear-gradient(90deg, rgba(8, 12, 20, 0.85), rgba(8, 12, 20, 0.35)); }
       h1 { font-size: clamp(3rem, 7.5vw, 5rem); }
-      .gallery { gap: 1rem; }
-      .work, .work:nth-child(n) { grid-column: span 6; }
-      .work:last-child { grid-column: 1 / -1; }
-      .work img, .work:nth-child(n) img { height: 260px; }
+      .gallery { gap: 5rem; }
+      .work { width: 58%; }
       .section-heading { flex-direction: column-reverse; gap: 1rem; }
       .perche-card { gap: 2.5rem; }
     }
@@ -215,14 +335,17 @@
       .nav-links a { font-size: 0.7rem; }
       section { padding: 4rem 0; scroll-margin-top: 6.5rem; }
       .hero { padding: 3rem 0 4rem; }
+      .banner { padding-top: 3.6rem; }
       h1 { font-size: clamp(2.45rem, 10.6vw, 3.5rem); line-height: 1.07; }
+      .home-card { padding: 1.6rem 1.3rem; }
       .hero-copy { margin-top: 2rem; padding: 1.2rem; }
       .hero-copy p { font-size: 0.88rem; }
       .tagline { margin-bottom: 1.6rem; }
       #opere { padding-top: 2rem; padding-bottom: 4rem; }
       #opere .section-heading { padding: 1.4rem; }
-      .work, .work:nth-child(n) { grid-column: 1 / -1; }
-      .work img, .work:nth-child(n) img { height: auto; aspect-ratio: 4 / 3; }
+      .gallery { gap: 3.5rem; padding-top: 2rem; }
+      .work { width: 82%; }
+      .viewer-prev, .viewer-next { display: none; }
       .excavator-stage svg { width: min(240px, 100%); }
       .attivita-grid, .perche-card { grid-template-columns: 1fr; }
       .attivita-card, .attivita-card:nth-child(even) { padding: 1.5rem 0; border-left: 0; gap: 1rem; }
@@ -232,6 +355,9 @@
       .closing-drop { left: 2px; width: 24px; height: 33px; }
       .closing-drop-neck { left: 13px; }
       footer .wrap { flex-direction: column; gap: 0.75rem; }
+    }
+    @media (max-width: 359px) {
+      .banner { padding-top: 5.4rem; }
     }
     @supports (animation-timeline: view()) {
       @keyframes work-entry {
@@ -246,7 +372,9 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .home-card { transform: none; }
       .work img { animation: none; }
+      .work { transform: none; }
       .excavator-active .activities-content { filter: none; opacity: 1; }
       .excavator-contact, .closing-drop-lane { display: none; }
     }
@@ -273,19 +401,18 @@
     <header class="banner" id="banner">
       <div class="banner-inner">
         <img src="banner.jpg" width="1024" height="160" alt="Pagliaccia Lavori - Scientia et actio" />
-        <div class="heron-layer" aria-hidden="true">
-          <img src="banner-base.jpg" width="1024" height="160" alt="" />
-          <svg viewBox="0 0 1024 160" focusable="false">
-            <g id="heron-wing-far"><image href="heron-wing-far.png" x="76" y="72" width="29" height="17" /></g>
-            <image href="heron-body.png" x="40" y="58" width="58" height="52" />
-            <g id="heron-wing-near"><image href="heron-wing-near.png" x="43" y="61" width="26" height="32" /></g>
-          </svg>
-        </div>
       </div>
     </header>
 
     <div class="intro" id="intro">
-      <div class="intro-art" aria-hidden="true"><canvas id="flow"></canvas></div>
+      <div class="intro-art" id="scene" aria-hidden="true">
+        <img class="scene-img scene-river" id="river-blur" src="river-blur.jpg" width="450" height="675" alt="" />
+        <img class="scene-img scene-river river-sharp" id="river-sharp" src="river.jpg" width="450" height="675" alt="" />
+        <img class="scene-img scene-fog" id="forest-fog" src="forest-fog.jpg" width="539" height="810" alt="" />
+        <img class="scene-img scene-layer" id="forest-top" src="forest-top.webp" width="539" height="810" alt="" />
+        <img class="scene-img scene-layer" id="forest-bottom" src="forest-bottom.webp" width="539" height="810" alt="" />
+        <img class="scene-img scene-photo" src="forest.jpg" width="539" height="810" alt="" />
+      </div>
       <div class="intro-content">
       <section class="hero" id="home">
         <div class="wrap">
@@ -318,15 +445,15 @@
             <span class="section-label">01 / Le realizzazioni</span>
           </div>
           <div class="gallery" id="gallery">
-            <figure class="work"><div class="work-image"><img src="opera1.jpg" alt="Cantiere con escavatore, scavi e canalizzazioni" width="1024" height="768" loading="lazy" /></div><figcaption><span>Lavorazioni in cantiere</span><span class="work-number">01 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera2.jpg" alt="Posa di cordoli e preparazione di un percorso esterno" width="1024" height="768" loading="lazy" /></div><figcaption><span>Sistemazioni esterne</span><span class="work-number">02 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera3.jpg" alt="Serbatoi interrati durante l'installazione" width="1024" height="768" loading="lazy" /></div><figcaption><span>Impianti interrati</span><span class="work-number">03 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera4.jpg" alt="Camminamento in pietra in un giardino" width="1024" height="768" loading="lazy" /></div><figcaption><span>Percorsi in pietra</span><span class="work-number">04 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera5.jpg" alt="Area giochi con struttura in legno e pavimentazione" width="1024" height="576" loading="lazy" /></div><figcaption><span>Spazi all'aperto</span><span class="work-number">05 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera6.jpg" alt="Percorso in ghiaia affiancato da una palizzata in legno" width="1024" height="576" loading="lazy" /></div><figcaption><span>Percorsi e contenimenti</span><span class="work-number">06 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera7.jpg" alt="Dettaglio di una pavimentazione con pietre naturali" width="1024" height="460" loading="lazy" /></div><figcaption><span>Dettagli e finiture</span><span class="work-number">07 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera8.jpg" alt="Vista dall'alto di un giardino con gazebo e pavimentazione" width="1024" height="460" loading="lazy" /></div><figcaption><span>Riqualificazione degli esterni</span><span class="work-number">08 / 09</span></figcaption></figure>
-            <figure class="work"><div class="work-image"><img src="opera9.jpg" alt="Preparazione del terreno di un percorso con contenimenti laterali" width="1024" height="576" loading="lazy" /></div><figcaption><span>Preparazione del terreno</span><span class="work-number">09 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera1.jpg" alt="Cantiere con escavatore, scavi e canalizzazioni" width="1024" height="768" loading="lazy" /></button><figcaption><span>Lavorazioni in cantiere</span><span class="work-number">01 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera2.jpg" alt="Posa di cordoli e preparazione di un percorso esterno" width="1024" height="768" loading="lazy" /></button><figcaption><span>Sistemazioni esterne</span><span class="work-number">02 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera3.jpg" alt="Serbatoi interrati durante l'installazione" width="1024" height="768" loading="lazy" /></button><figcaption><span>Impianti interrati</span><span class="work-number">03 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera4.jpg" alt="Camminamento in pietra in un giardino" width="1024" height="768" loading="lazy" /></button><figcaption><span>Percorsi in pietra</span><span class="work-number">04 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera5.jpg" alt="Area giochi con struttura in legno e pavimentazione" width="1024" height="576" loading="lazy" /></button><figcaption><span>Spazi all'aperto</span><span class="work-number">05 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera6.jpg" alt="Percorso in ghiaia affiancato da una palizzata in legno" width="1024" height="576" loading="lazy" /></button><figcaption><span>Percorsi e contenimenti</span><span class="work-number">06 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera7.jpg" alt="Dettaglio di una pavimentazione con pietre naturali" width="1024" height="460" loading="lazy" /></button><figcaption><span>Dettagli e finiture</span><span class="work-number">07 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera8.jpg" alt="Vista dall'alto di un giardino con gazebo e pavimentazione" width="1024" height="460" loading="lazy" /></button><figcaption><span>Riqualificazione degli esterni</span><span class="work-number">08 / 09</span></figcaption></figure>
+            <figure class="work"><button type="button" class="work-image" aria-label="Apri la foto a schermo intero"><img src="opera9.jpg" alt="Preparazione del terreno di un percorso con contenimenti laterali" width="1024" height="576" loading="lazy" /></button><figcaption><span>Preparazione del terreno</span><span class="work-number">09 / 09</span></figcaption></figure>
           </div>
         </div>
       </section>
@@ -334,6 +461,7 @@
     </div>
 
     <section id="attivita">
+      <span class="glass-line" id="glass-line" aria-hidden="true"></span>
       <div class="wrap">
         <div class="excavator-stage" aria-hidden="true">
           <svg id="excavator" viewBox="0 0 400 236" fill="currentColor" focusable="false">
@@ -479,6 +607,14 @@
     </section>
   </main>
 
+  <dialog class="viewer" id="viewer" aria-label="Foto delle opere">
+    <span class="viewer-count" id="viewer-count"></span>
+    <button type="button" class="viewer-button viewer-close" id="viewer-close" aria-label="Chiudi">&times;</button>
+    <button type="button" class="viewer-button viewer-prev" id="viewer-prev" aria-label="Foto precedente">&#8249;</button>
+    <button type="button" class="viewer-button viewer-next" id="viewer-next" aria-label="Foto successiva">&#8250;</button>
+    <div class="viewer-track" id="viewer-track"></div>
+  </dialog>
+
   <footer>
     <div class="wrap">
       <span>Pagliaccia Lavori &mdash; Dal 1992</span>
@@ -509,41 +645,6 @@
     </div>
   </footer>
 
-  <script>
-    (() => {
-      const banner = document.getElementById('banner');
-      const near = document.getElementById('heron-wing-near');
-      const far = document.getElementById('heron-wing-far');
-      const nav = document.querySelector('nav');
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const clamp = value => Math.max(0, Math.min(1, value));
-      let frame = 0;
-      let last = -1;
-
-      function render() {
-        frame = 0;
-        banner.style.paddingTop = `${nav.offsetHeight}px`;
-        const bounds = banner.getBoundingClientRect();
-        const range = Math.max(1, bounds.bottom - banner.querySelector('img').offsetHeight * 0.48 + window.scrollY - nav.offsetHeight);
-        const progress = reducedMotion.matches ? 0 : clamp(window.scrollY / range);
-        if (progress === last) return;
-        last = progress;
-        banner.classList.toggle('heron-moving', progress > 0);
-        near.setAttribute('transform', `rotate(${(-95 * progress).toFixed(3)} 62 78) translate(62 78) scale(${(1 - 0.15 * progress).toFixed(4)}) translate(-62 -78)`);
-        far.setAttribute('transform', `rotate(${(40 * progress).toFixed(3)} 78 77) translate(78 77) scale(${(1 - 0.7 * progress).toFixed(4)}) translate(-78 -77)`);
-        far.setAttribute('opacity', (1 - clamp((progress - 0.55) / 0.45)).toFixed(3));
-      }
-
-      function schedule() {
-        if (!frame) frame = requestAnimationFrame(render);
-      }
-
-      window.addEventListener('scroll', schedule, { passive: true });
-      window.addEventListener('resize', schedule, { passive: true });
-      reducedMotion.addEventListener('change', schedule);
-      render();
-    })();
-  </script>
   <script>
     (() => {
       const section = document.getElementById('attivita');
@@ -629,159 +730,229 @@
     })();
 
     (() => {
-      const canvas = document.getElementById('flow');
       const intro = document.getElementById('intro');
+      const scene = document.getElementById('scene');
+      const fog = document.getElementById('forest-fog');
+      const layers = [document.getElementById('forest-top'), document.getElementById('forest-bottom')];
+      const gallery = document.getElementById('gallery');
+      const riverImages = [document.getElementById('river-blur'), document.getElementById('river-sharp')];
+      const works = [...gallery.querySelectorAll('.work')];
+      const RW = 450, RH = 675;
+      const line = document.getElementById('glass-line');
+      const hero = document.getElementById('home');
+      const card = hero.querySelector('.home-card');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      let gl;
-      let program;
-      let resolution;
-      let scrollPosition;
+      const clamp = value => Math.max(0, Math.min(1, value));
+      const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
+      const pageTop = element => element.getBoundingClientRect().top + window.scrollY;
+      const W = 539, H = 810, PX = 270, PY = 400, EDGE = 95;
+      const NX = -0.4067, NY = -0.9135;
       let frame = 0;
-      let lost = false;
 
-      function fallback() {
-        canvas.classList.remove('ready');
-        cancelAnimationFrame(frame);
-        frame = 0;
-      }
-
-      function compile(type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          gl.deleteShader(shader);
-          throw new Error('Shader non disponibile');
+      function covers(scale, angle, shift, width, height, s, px, py) {
+        const cos = Math.cos(-angle), sin = Math.sin(-angle);
+        const ox = (width - W * s) / 2, oy = (height - H * s) / 2;
+        for (let i = 0; i <= 12; i++) for (let j = 0; j <= 12; j++) {
+          const dx = width * i / 12 - px, dy = height * j / 12 - py;
+          for (const sign of [1, -1]) {
+            const lx = (cos * dx - sin * dy - sign * NX * shift) / scale;
+            const ly = (sin * dx + cos * dy - sign * NY * shift) / scale;
+            if ((lx * NX + ly * NY) * sign < EDGE * s) continue;
+            const ix = (px + lx - ox) / s, iy = (py + ly - oy) / s;
+            if (ix < 0 || iy < 0 || ix > W || iy > H) return false;
+          }
         }
-        return shader;
-      }
-
-      function initialize() {
-        try {
-          gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
-          if (!gl) return;
-          const vertex = compile(gl.VERTEX_SHADER, `
-            attribute vec2 aPosition;
-            varying vec2 vUv;
-            void main() {
-              vUv = aPosition * 0.5 + 0.5;
-              gl_Position = vec4(aPosition, 0.0, 1.0);
-            }
-          `);
-          const fragment = compile(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            varying vec2 vUv;
-            uniform vec2 uResolution;
-            uniform float uScroll;
-
-            float hash(vec2 p) {
-              vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-              p3 += dot(p3, p3.yzx + 33.33);
-              return fract((p3.x + p3.y) * p3.z);
-            }
-
-            float noise(vec2 p) {
-              vec2 cell = floor(p);
-              vec2 f = fract(p);
-              f = f * f * (3.0 - 2.0 * f);
-              return mix(mix(hash(cell), hash(cell + vec2(1.0, 0.0)), f.x),
-                mix(hash(cell + vec2(0.0, 1.0)), hash(cell + vec2(1.0)), f.x), f.y);
-            }
-
-            void main() {
-              vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
-              float travel = uScroll * 0.32;
-              float y = uv.y + travel;
-              float curve = 0.48 + 0.29 * sin(y * 8.5 + 1.0);
-              curve += 0.035 * sin(y * 16.0 - travel * 0.7);
-              float clouds = noise(vec2(uv.x * 5.0, y * 5.0));
-              float width = 0.115 + 0.035 * sin(y * 5.5 + 0.6);
-              float distanceToFlow = abs(uv.x - curve + (clouds - 0.5) * 0.075);
-              float core = exp(-pow(distanceToFlow / width, 2.0) * 1.4);
-              float haze = exp(-pow(distanceToFlow / (width * 2.0), 2.0));
-              float side = exp(-pow((uv.x + 0.18 * sin(y * 5.0) - 0.04) / 0.17, 2.0));
-              side *= 0.25 + 0.3 * noise(vec2(uv.x * 3.0, y * 3.0));
-              float light = clamp(core * 0.8 + haze * 0.24 + side * 0.5, 0.0, 1.0);
-              vec3 color = mix(vec3(0.025, 0.035, 0.055), vec3(0.45, 0.46, 0.43), smoothstep(0.02, 0.6, light));
-              color = mix(color, vec3(0.88, 0.875, 0.815), smoothstep(0.38, 1.0, light));
-              vec2 pixel = uv * uResolution;
-              float grain = hash(floor(pixel)) - 0.5;
-              float weave = sin(pixel.x * 2.3 + pixel.y * 0.85) * sin(pixel.y * 2.15);
-              color += grain * (0.055 + light * 0.09) + weave * 0.018;
-              color *= 0.94 + noise(vec2(uv.x * 17.0, y * 17.0)) * 0.06;
-              gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
-            }
-          `);
-          program = gl.createProgram();
-          gl.attachShader(program, vertex);
-          gl.attachShader(program, fragment);
-          gl.linkProgram(program);
-          gl.deleteShader(vertex);
-          gl.deleteShader(fragment);
-          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error('Programma grafico non disponibile');
-          gl.useProgram(program);
-          const buffer = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
-          const position = gl.getAttribLocation(program, 'aPosition');
-          gl.enableVertexAttribArray(position);
-          gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-          resolution = gl.getUniformLocation(program, 'uResolution');
-          scrollPosition = gl.getUniformLocation(program, 'uScroll');
-          schedule();
-        } catch {
-          program = null;
-          fallback();
-        }
+        return true;
       }
 
       function render() {
         frame = 0;
-        if (!program || lost || document.hidden) return;
-        const bounds = intro.getBoundingClientRect();
-        if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
+        const width = scene.clientWidth, height = scene.clientHeight;
         if (!width || !height) return;
-        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-        const pixelWidth = Math.round(width * ratio);
-        const pixelHeight = Math.round(height * ratio);
-        if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
-          canvas.width = pixelWidth;
-          canvas.height = pixelHeight;
-          gl.viewport(0, 0, pixelWidth, pixelHeight);
-        }
-        const scroll = reducedMotion.matches ? 0 : Math.max(0, Math.min(-bounds.top, bounds.height - height)) / height;
-        gl.uniform2f(resolution, pixelWidth, pixelHeight);
-        gl.uniform1f(scrollPosition, scroll);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        canvas.classList.add('ready');
+        const start = pageTop(intro);
+        const end = Math.max(start + 1, pageTop(gallery) + gallery.offsetHeight / 2 - height / 2);
+        const progress = reducedMotion.matches ? 0 : clamp((window.scrollY - start) / (end - start));
+        const s = Math.max(width / W, height / H);
+        const px = (width - W * s) / 2 + PX * s, py = (height - H * s) / 2 + PY * s;
+        const turn = smooth(progress / 0.55);
+        const slide = clamp((progress - 0.55) / 0.45);
+        const angle = -66 * turn * Math.PI / 180;
+        const open = Math.max(width, height) * 0.08 * turn;
+        let low = 1, high = 4;
+        if (covers(1, angle, open, width, height, s, px, py)) high = 1;
+        else for (let k = 0; k < 14; k++) { const mid = (low + high) / 2; if (covers(mid, angle, open, width, height, s, px, py)) high = mid; else low = mid; }
+        const shift = open + (width / 2 + 300 * s * high) * slide * slide;
+        const box = { left: `${((width - W * s) / 2).toFixed(2)}px`, top: `${((height - H * s) / 2).toFixed(2)}px`, width: `${(W * s).toFixed(2)}px`, height: `${(H * s).toFixed(2)}px` };
+        layers.forEach((layer, index) => {
+          const sign = index ? -1 : 1;
+          Object.assign(layer.style, box);
+          layer.style.transformOrigin = `${(PX * s).toFixed(2)}px ${(PY * s).toFixed(2)}px`;
+          layer.style.transform = `rotate(${angle.toFixed(5)}rad) translate(${(sign * NX * shift).toFixed(2)}px, ${(sign * NY * shift).toFixed(2)}px) scale(${high.toFixed(4)})`;
+        });
+        fog.style.filter = slide > 0 ? `blur(${(slide * 14).toFixed(2)}px)` : '';
+        scene.classList.toggle('scene-moving', progress > 0);
+        const riverEnd = Math.max(end + 1, pageTop(intro) + intro.offsetHeight - height);
+        const river = reducedMotion.matches ? 0 : clamp((window.scrollY - end) / (riverEnd - end));
+        const rs = Math.max(width / RW, height / RH) * 1.12;
+        riverImages.forEach(image => Object.assign(image.style, {
+          objectFit: 'fill',
+          left: `${((width - RW * rs) / 2).toFixed(2)}px`,
+          top: '0px',
+          width: `${(RW * rs).toFixed(2)}px`,
+          height: `${(RH * rs).toFixed(2)}px`,
+          transform: `translate3d(0, ${(-(RH * rs - height) * river).toFixed(2)}px, 0)`
+        }));
+        riverImages[1].style.setProperty('--reveal', `${(-14 + 114 * clamp((river - 0.08) / 0.92)).toFixed(2)}%`);
+        fog.style.opacity = (1 - smooth(river / 0.35)).toFixed(3);
+        scene.classList.toggle('river-on', progress >= 1);
+        const lineProgress = reducedMotion.matches ? 1 : clamp((window.scrollY - riverEnd) / (height * 0.6));
+        const grow = smooth(lineProgress);
+        line.style.setProperty('--line-width', `${(grow * 100).toFixed(3)}%`);
+        line.style.setProperty('--line-height', `${(2 + 6 * smooth((lineProgress - 0.35) / 0.65)).toFixed(3)}px`);
+        line.style.setProperty('--line-opacity', lineProgress > 0 ? '1' : '0');
+        works.forEach(work => {
+          const box = work.getBoundingClientRect();
+          if (box.bottom < -200 || box.top > height + 200) return;
+          const offset = reducedMotion.matches ? 0 : ((box.top + box.height / 2) / height - 0.5) * -60;
+          work.style.setProperty('--float', `${offset.toFixed(2)}px`);
+        });
+        const lift = reducedMotion.matches ? 0 : clamp(-hero.getBoundingClientRect().top / hero.offsetHeight);
+        card.style.setProperty('--lift', `${(-90 * lift).toFixed(2)}px`);
+        card.style.setProperty('--lift-scale', (1 + 0.05 * lift).toFixed(4));
       }
 
       function schedule() {
-        if (!frame && !lost && !document.hidden) frame = requestAnimationFrame(render);
+        if (!frame) frame = requestAnimationFrame(render);
       }
 
       window.addEventListener('scroll', schedule, { passive: true });
       window.addEventListener('resize', schedule, { passive: true });
       reducedMotion.addEventListener('change', schedule);
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          cancelAnimationFrame(frame);
-          frame = 0;
-        } else schedule();
-      });
-      canvas.addEventListener('webglcontextlost', event => {
-        event.preventDefault();
-        lost = true;
-        fallback();
-      });
-      canvas.addEventListener('webglcontextrestored', () => {
-        lost = false;
-        initialize();
-      });
       if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(intro);
-      initialize();
+      render();
+    })();
+    (() => {
+      const viewer = document.getElementById('viewer');
+      const track = document.getElementById('viewer-track');
+      const count = document.getElementById('viewer-count');
+      const buttons = [...document.querySelectorAll('.work-image')];
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!viewer || typeof viewer.showModal !== 'function') return;
+      const total = buttons.length;
+      const pad = value => String(value).padStart(2, '0');
+      const slides = buttons.map(button => {
+        const source = button.querySelector('img');
+        const slide = document.createElement('figure');
+        const image = document.createElement('img');
+        const caption = document.createElement('p');
+        slide.className = 'viewer-slide';
+        image.src = source.getAttribute('src');
+        image.alt = source.alt;
+        image.width = source.width;
+        image.height = source.height;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        caption.textContent = button.closest('.work').querySelector('figcaption span').textContent;
+        slide.append(image, caption);
+        track.append(slide);
+        return slide;
+      });
+      let current = 0;
+      let closing = false;
+      let wheelLock = 0;
+
+      const position = () => Math.max(0, Math.min(total - 1, Math.round(track.scrollLeft / Math.max(1, track.clientWidth))));
+      const update = () => {
+        current = position();
+        count.textContent = `${pad(current + 1)} / ${pad(total)}`;
+      };
+      const go = (index, animate = true) => {
+        const target = Math.max(0, Math.min(total - 1, index));
+        track.scrollTo({ left: target * track.clientWidth, behavior: animate && !reducedMotion.matches ? 'smooth' : 'instant' });
+      };
+      const visible = rect => rect.width > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
+
+      function fly(image, from, to) {
+        const flight = document.createElement('img');
+        flight.className = 'viewer-flight';
+        flight.src = image.currentSrc || image.src;
+        flight.alt = '';
+        Object.assign(flight.style, { width: `${to.width}px`, height: `${to.height}px`, transform: `translate(${to.left}px, ${to.top}px)` });
+        viewer.append(flight);
+        const start = `translate(${from.left}px, ${from.top}px) scale(${from.width / to.width}, ${from.height / to.height})`;
+        const animation = flight.animate([{ transform: start }, { transform: `translate(${to.left}px, ${to.top}px)` }], { duration: 360, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards' });
+        return animation.finished.catch(() => {}).then(() => flight);
+      }
+
+      async function open(index) {
+        if (viewer.open) return;
+        const thumb = buttons[index].querySelector('img');
+        const from = thumb.getBoundingClientRect();
+        document.documentElement.classList.add('viewer-open');
+        viewer.showModal();
+        go(index, false);
+        update();
+        history.pushState({ viewer: true }, '');
+        const target = slides[index].querySelector('img');
+        if (reducedMotion.matches) return;
+        if (!target.complete) await new Promise(resolve => target.addEventListener('load', resolve, { once: true }));
+        const to = target.getBoundingClientRect();
+        if (!to.width) return;
+        target.style.visibility = 'hidden';
+        const flight = await fly(thumb, from, to);
+        target.style.visibility = '';
+        flight.remove();
+      }
+
+      async function finish() {
+        if (!viewer.open || closing) return;
+        closing = true;
+        const image = slides[current].querySelector('img');
+        const thumb = buttons[current].querySelector('img');
+        const to = thumb.getBoundingClientRect();
+        if (!reducedMotion.matches && visible(to)) {
+          const from = image.getBoundingClientRect();
+          image.style.visibility = 'hidden';
+          track.style.opacity = '0';
+          viewer.classList.add('viewer-closing');
+          const flight = await fly(image, from, to);
+          flight.remove();
+          image.style.visibility = '';
+        }
+        viewer.close();
+        viewer.classList.remove('viewer-closing');
+        track.style.opacity = '';
+        document.documentElement.classList.remove('viewer-open');
+        closing = false;
+      }
+
+      const requestClose = () => {
+        if (history.state && history.state.viewer) history.back();
+        else finish();
+      };
+
+      buttons.forEach((button, index) => button.addEventListener('click', () => open(index)));
+      document.getElementById('viewer-close').addEventListener('click', requestClose);
+      document.getElementById('viewer-prev').addEventListener('click', () => go(current - 1));
+      document.getElementById('viewer-next').addEventListener('click', () => go(current + 1));
+      track.addEventListener('scroll', update, { passive: true });
+      track.addEventListener('click', event => { if (event.target.tagName !== 'IMG') requestClose(); });
+      track.addEventListener('wheel', event => {
+        const delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : 0;
+        if (!delta) return;
+        event.preventDefault();
+        const now = performance.now();
+        if (now < wheelLock) return;
+        wheelLock = now + 450;
+        go(current + Math.sign(delta));
+      }, { passive: false });
+      viewer.addEventListener('cancel', event => { event.preventDefault(); requestClose(); });
+      viewer.addEventListener('keydown', event => {
+        if (event.key === 'ArrowRight') go(current + 1);
+        if (event.key === 'ArrowLeft') go(current - 1);
+      });
+      window.addEventListener('popstate', () => { if (viewer.open) finish(); });
+      window.addEventListener('resize', () => { if (viewer.open) go(current, false); });
     })();
   </script>
 </body>
